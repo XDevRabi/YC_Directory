@@ -69,7 +69,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={workSans.variable}>
         {children}
-        <Toaster />
+        {/* <Toaster /> */}
       </body>
     </html>
   );
