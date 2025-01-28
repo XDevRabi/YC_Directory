@@ -11,6 +11,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  experimental: { // since ppr is an experimental feature right now
+    ppr: "incremental", // to enable incremental build
+  },
+  devIndicators: { // to enable additional feature to visualize build activity on ppr. 
+    appIsrStatus: true,
+    buildActivity: true,
+    buildActivityPosition: "bottom-right",
+  },
 };
 
 export default nextConfig;
