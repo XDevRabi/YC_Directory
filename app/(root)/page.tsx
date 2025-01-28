@@ -13,7 +13,7 @@ export default async function Home(
   }
 ) {
   const query = (await searchParams).query; // get the query from searchParams
-  const params = { search: query || null };
+  const params = { search: query || null }; // params variable is used to pass the query to the sanity query for real time search.
 
   const session = await auth();
 
