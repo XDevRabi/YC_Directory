@@ -47,7 +47,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
         <img
           src={post.image}
           alt="thumbnail"
-          className="w-full h-auto rounded-xl"
+          className="w-full h-auto rounded-xl aspect-video object-cover"
         />
 
         <div className="space-y-5 mt-10 max-w-4xl mx-auto">
@@ -89,8 +89,18 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
         <hr className="divider" />
 
         {/* Till here: the section are static rendering content. We dont need to fetch the data dynamically. */}
+{/* 
+        {editorPosts?.length > 0 && (
+          <div className="max-w-4xl mx-auto">
+            <p className="text-30-semibold">Editor Picks</p>
 
-
+            <ul className="mt-7 card_grid-sm">
+              {editorPosts.map((post: StartupTypeCard, i: number) => (
+                <StartupCard key={i} post={post} />
+              ))}
+            </ul>
+          </div>
+        )} */}
 
         {/* From here the data are completely dynamic and need to fetch the data on real time. So whenever we need to fetch the data dynamically we will use PPR. and for that we have to wrap the component with "Suspense"  */}
         <Suspense fallback={<Skeleton className="view_skeleton" />}>

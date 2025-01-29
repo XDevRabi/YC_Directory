@@ -17,7 +17,7 @@ export default async function Home(
 
   const session = await auth();
 
-  // console.log(session?.id);
+  console.log(session?.id);
 
   // const posts = await client.fetch(STARTUPS_QUERY); // fetch data from sanity. to use this we have to `import { client } from "@/sanity/lib/client` But to fetch live data automatically we have to use "sanityFetch"
   const { data: posts } = await sanityFetch({ query: STARTUPS_QUERY, params });

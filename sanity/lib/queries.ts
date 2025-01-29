@@ -37,6 +37,7 @@ export const STARTUP_VIEWS_QUERY = defineQuery(`
     }
 `);
 
+// To check the github id match any author id. (used to create a new author of that github id if not exist)
 export const AUTHOR_BY_GITHUB_ID_QUERY = defineQuery(`
 *[_type == "author" && id == $id][0]{
     _id,
