@@ -29,24 +29,27 @@ const StartupForm = () => {
         pitch,
       };
 
-      await formSchema.parseAsync(formValues);
+      await formSchema.parseAsync(formValues); // validating the form data using zod (formSchema)
 
-      const result = await createPitch(prevState, formData, pitch);
+      // const result = await createPitch(prevState, formData, pitch);
 
-      if (result.status == "SUCCESS") {
-        toast({
-          title: "Success",
-          description: "Your startup pitch has been created successfully",
-        });
+      // if (result.status == "SUCCESS") {
+      //   toast({
+      //     title: "Success",
+      //     description: "Your startup pitch has been created successfully",
+      //   });
 
-        router.push(`/startup/${result._id}`);
-      }
+      //   router.push(`/startup/${result._id}`);
+      // }
 
-      return result;
+      // return result;
     } catch (error) {
+
+      // checking if the error is a zod error
       if (error instanceof z.ZodError) {
         const fieldErorrs = error.flatten().fieldErrors;
 
+        // setting the errors state (the error message will automatically generate by zod)
         setErrors(fieldErorrs as unknown as Record<string, string>);
 
         toast({
@@ -58,6 +61,7 @@ const StartupForm = () => {
         return { ...prevState, error: "Validation failed", status: "ERROR" };
       }
 
+      // if the error is another type of error other than zod error
       toast({
         title: "Error",
         description: "An unexpected error has occurred",
@@ -72,13 +76,34 @@ const StartupForm = () => {
     }
   };
 
-  // const [state, formAction, isPending] = useActionState(handleFormSubmit, {
-  //   error: "",
-  //   status: "INITIAL",
-  // });
+  /**
+   * useActionState hook
+   *
+   * This hook returns three values which represent the state of the
+   * action (INITIAL, PENDING, SUCCESS, ERROR) and a function to
+   * submit the form. The function returned by this hook accepts
+   * a submit event and a function to handle the form data.
+   *
+   * This hook is useful because it allows us to manage the state
+   * of a form in a simple and predictable way. It also handles
+   * the pending state of the form, which is useful when we are
+   * submitting the form to the server and we want to show a loading
+   * indicator while the form is being submitted.
+   *
+   * The useActionState hook returns an array with three values:
+   * - state: The current state of the form (INITIAL, PENDING, SUCCESS, ERROR)
+   * - formAction: A function that accepts a submit event and a function
+   *   to handle the form data.
+   * - isPending: A boolean that is true if the form is currently being
+   *   submitted and false otherwise.
+   */
+  const [state, formAction, isPending] = useActionState(handleFormSubmit, {
+    error: "",
+    status: "INITIAL",
+  });
 
   return (
-    <form action={()=>{}} className="startup-form">
+    <form action={formAction} className="startup-form">
       <div>
         <label htmlFor="title" className="startup-form_label">
           Title
