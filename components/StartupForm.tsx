@@ -10,7 +10,7 @@ import { formSchema } from "@/lib/validation";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
-// import { createPitch } from "@/lib/actions";
+import { createPitch } from "@/lib/actions";
 
 const StartupForm = () => {
   // Record<string, string> is a type that represents an object where the keys are strings and the values are also strings.
@@ -31,18 +31,19 @@ const StartupForm = () => {
 
       await formSchema.parseAsync(formValues); // validating the form data using zod (formSchema)
 
-      // const result = await createPitch(prevState, formData, pitch);
+      // CreatePitch is a function that is used to create a startup pitch execute in a server action.
+      const result = await createPitch(prevState, formData, pitch);
 
-      // if (result.status == "SUCCESS") {
-      //   toast({
-      //     title: "Success",
-      //     description: "Your startup pitch has been created successfully",
-      //   });
+      if (result.status == "SUCCESS") {
+        toast({
+          title: "Success",
+          description: "Your startup pitch has been created successfully",
+        });
 
-      //   router.push(`/startup/${result._id}`);
-      // }
+        router.push(`/startup/${result._id}`);
+      }
 
-      // return result;
+      return result;
     } catch (error) {
 
       // checking if the error is a zod error
