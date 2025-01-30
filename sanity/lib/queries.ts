@@ -50,6 +50,7 @@ export const AUTHOR_BY_GITHUB_ID_QUERY = defineQuery(`
 }
 `);
 
+// To check the sanity id match any author id.
 export const AUTHOR_BY_ID_QUERY = defineQuery(`
 *[_type == "author" && _id == $id][0]{
     _id,
