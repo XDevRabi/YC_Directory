@@ -21,14 +21,16 @@ export const experimental_ppr = true;
 const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id; // get the id from params. /startup/[id]
 
-  const post = await client.fetch(STARTUP_BY_ID_QUERY, { id });
+  // const post = await client.fetch(STARTUP_BY_ID_QUERY, { id }); // fetch startup data from sanity in a sequential order. which means requests in a route are dependent on each other and therefore create waterfalls.
 
-  // const [post, { select: editorPosts }] = await Promise.all([
-  //   client.fetch(STARTUP_BY_ID_QUERY, { id }),
-  //   client.fetch(PLAYLIST_BY_SLUG_QUERY, {
-  //     slug: "editor-picks-new",
-  //   }),
-  // ]);
+  // but this a parellel data fetching pattern. requests in a route are eagerly initiated and will load data at the same time. This reduces client-server waterfalls and the total time it takes to load data.
+  const [post, { select: editorPosts }] = await Promise.all([
+    client.fetch(STARTUP_BY_ID_QUERY, { id }), // fetch data will stored on `post`
+    client.fetch(PLAYLIST_BY_SLUG_QUERY, {
+      // fetch data will stored on `editorPosts`
+      slug: "editor-picks",
+    }),
+  ]);
 
   if (!post) return notFound();
 
@@ -88,8 +90,6 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
         <hr className="divider" />
 
-        {/* Till here: the section are static rendering content. We dont need to fetch the data dynamically. */}
-{/* 
         {editorPosts?.length > 0 && (
           <div className="max-w-4xl mx-auto">
             <p className="text-30-semibold">Editor Picks</p>
@@ -100,8 +100,9 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
               ))}
             </ul>
           </div>
-        )} */}
+        )}
 
+        {/* Till here: the section are static rendering content. We dont need to fetch the data dynamically. */}
         {/* From here the data are completely dynamic and need to fetch the data on real time. So whenever we need to fetch the data dynamically we will use PPR. and for that we have to wrap the component with "Suspense"  */}
         <Suspense fallback={<Skeleton className="view_skeleton" />}>
           {/* This component is a small component which has infomation about the views on the startup page. Which we be fetching on real time */}
